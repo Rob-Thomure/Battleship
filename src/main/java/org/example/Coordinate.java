@@ -18,6 +18,13 @@ public class Coordinate {
         return row > '@' && row < 'K' && column > 0 && column < 11;
     }
 
+    public boolean isAdjacentToAnother(Coordinate otherCoordinate) {
+        int rowDifference = Math.abs(row - otherCoordinate.row);
+        int columnDifference = Math.abs(column - otherCoordinate.column);
+        return (rowDifference == 0 && columnDifference < 2)
+                || (columnDifference == 0 && rowDifference < 2);
+    }
+
     public char getRow() {
         return row;
     }

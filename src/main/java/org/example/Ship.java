@@ -1,16 +1,30 @@
 package org.example;
 
 public abstract class Ship {
-    private int shipLength;
-    private Coordinates coordinates;
+    private final int shipLength;
+    private final Coordinates coordinates;
 
     public Ship(int shipLength, Coordinates coordinates) {
+        if (shipLength != coordinates.getLength()) {
+            throw new IllegalArgumentException("Invalid ship length");
+        }
         this.shipLength = shipLength;
         this.coordinates = coordinates;
     }
 
     public int getShipLength() {
         return shipLength;
+    }
+
+    public boolean isAdjacentToAnotherShip(Ship otherShip) {
+        for (Coordinate coordinate : coordinates.getParts()) {
+            for (Coordinate otherShipCoordinate : otherShip.getCoordinates().getParts()) {
+                if (coordinate.isAdjacentToAnother(otherShipCoordinate)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Coordinates getCoordinates() {

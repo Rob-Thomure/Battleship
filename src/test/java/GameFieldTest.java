@@ -1,6 +1,4 @@
-import org.example.Coordinate;
-import org.example.Coordinates;
-import org.example.GameField;
+import org.example.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,10 +27,7 @@ public class GameFieldTest {
 
     @Test
     public void testAddAircraftCarrierF3F7() {
-        Coordinate coordinateF3 = new Coordinate("F3");
-        Coordinate coordinateF7 = new Coordinate("F7");
-        Coordinates coordinatesF3F7 = new Coordinates(coordinateF3, coordinateF7);
-        gameField.addAirCraftCarrier(coordinatesF3F7);
+        addAircraftCarrierF3F7();
         String expectedGameFieldString = """
                   1 2 3 4 5 6 7 8 9 10
                 A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -51,17 +46,9 @@ public class GameFieldTest {
     }
 
     @Test
-    public void testAddBattleshipA1D1() {
-        // TODO refactor
-        Coordinate coordinateF3 = new Coordinate("F3");
-        Coordinate coordinateF7 = new Coordinate("F7");
-        Coordinates coordinatesF3F7 = new Coordinates(coordinateF3, coordinateF7);
-        gameField.addAirCraftCarrier(coordinatesF3F7);
-
-        Coordinate coordinateA1 = new Coordinate("A1");
-        Coordinate coordinateD1 = new Coordinate("D1");
-        Coordinates coordinatesA1D1 = new Coordinates(coordinateA1, coordinateD1);
-        gameField.addBattleship(coordinatesA1D1);
+    public void testThenAddBattleshipA1D1() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
         String expectedGameFieldString = """
                   1 2 3 4 5 6 7 8 9 10
                 A O ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -77,7 +64,127 @@ public class GameFieldTest {
                 """;
         String actualGameFieldString = gameField.toString();
         assertEquals(expectedGameFieldString, actualGameFieldString);
+    }
 
+    @Test
+    public void testThenAddSubmarineJ10J8() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        String expectedGameFieldString = """
+                  1 2 3 4 5 6 7 8 9 10
+                A O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                B O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                C O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                D O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ O O O O O ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ ~ ~ ~ ~ ~ ~ O O O
+                """;
+        String actualGameFieldString = gameField.toString();
+        assertEquals(expectedGameFieldString, actualGameFieldString);
+    }
+
+    @Test
+    public void testThenAddCruiserB9D9() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        String expectedGameFieldString = """
+                  1 2 3 4 5 6 7 8 9 10
+                A O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                B O ~ ~ ~ ~ ~ ~ ~ O ~
+                C O ~ ~ ~ ~ ~ ~ ~ O ~
+                D O ~ ~ ~ ~ ~ ~ ~ O ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ O O O O O ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ ~ ~ ~ ~ ~ ~ O O O
+                """;
+        String actualGameFieldString = gameField.toString();
+        assertEquals(expectedGameFieldString, actualGameFieldString);
+    }
+
+    @Test
+    public void testThenAddDestroyerE6D6AdjacentToAircraftCarrierF3F7() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        Coordinate coordinateE6 = new Coordinate("E6");
+        Coordinate coordinateD6 = new Coordinate("D6");
+        Coordinates coordinatesE6D6 = new Coordinates(coordinateE6, coordinateD6);
+        Ship destroyer = new Destroyer(coordinatesE6D6);
+        assertThrows(IllegalArgumentException.class, () -> gameField.addShip(destroyer));
+    }
+
+    @Test
+    public void testThenAddDestroyerI2J2() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        Coordinate coordinateI2 = new Coordinate("I2");
+        Coordinate coordinateJ2 = new Coordinate("J2");
+        Coordinates coordinatesE6D6 = new Coordinates(coordinateI2, coordinateJ2);
+        Ship destroyer = new Destroyer(coordinatesE6D6);
+        gameField.addShip(destroyer);
+        String expecpectedGameFieldString = """
+                  1 2 3 4 5 6 7 8 9 10
+                A O ~ ~ ~ ~ ~ ~ ~ ~ ~
+                B O ~ ~ ~ ~ ~ ~ ~ O ~
+                C O ~ ~ ~ ~ ~ ~ ~ O ~
+                D O ~ ~ ~ ~ ~ ~ ~ O ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ O O O O O ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ O ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ O ~ ~ ~ ~ ~ O O O
+                """;
+        String actualGameFieldString = gameField.toString();
+        assertEquals(expecpectedGameFieldString, actualGameFieldString);
+    }
+
+
+
+
+    private void addAircraftCarrierF3F7() {
+        Coordinate coordinateF3 = new Coordinate("F3");
+        Coordinate coordinateF7 = new Coordinate("F7");
+        Coordinates coordinatesF3F7 = new Coordinates(coordinateF3, coordinateF7);
+        Ship airCraftCarrier = new AirCraftCarrier(coordinatesF3F7);
+        gameField.addShip(airCraftCarrier);
+    }
+
+    private void addBattleshipA1D1() {
+        Coordinate coordinateA1 = new Coordinate("A1");
+        Coordinate coordinateD1 = new Coordinate("D1");
+        Coordinates coordinatesA1D1 = new Coordinates(coordinateA1, coordinateD1);
+        Ship battleship = new Battleship(coordinatesA1D1);
+        gameField.addShip(battleship);
+    }
+
+    private void addSubmarineJ10J8() {
+        Coordinate coordinateJ10 = new Coordinate("J10");
+        Coordinate coordinateJ8 = new Coordinate("J8");
+        Coordinates coordinatesJ10J8 = new Coordinates(coordinateJ10, coordinateJ8);
+        Ship submarine = new Submarine(coordinatesJ10J8);
+        gameField.addShip(submarine);
+    }
+
+    private void addCruiserB9D9() {
+        Coordinate coordinateB9 = new Coordinate("B9");
+        Coordinate coordinateD9 = new Coordinate("D9");
+        Coordinates coordinatesB9D9 = new Coordinates(coordinateB9, coordinateD9);
+        Ship cruiser = new Cruiser(coordinatesB9D9);
+        gameField.addShip(cruiser);
     }
 
 

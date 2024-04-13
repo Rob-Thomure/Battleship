@@ -6,4 +6,5 @@ public class AirCraftCarrier extends Ship{
     public AirCraftCarrier(Coordinates coordinates) {
         super(SHIP_Length, coordinates);
     }
+
 }

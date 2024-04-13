@@ -40,7 +40,12 @@ public class GameField {
         return stringBuffer.toString();
     }
 
-    public void addShip(Ship ship) {
+    public void addShip(Ship ship) throws IllegalArgumentException {
+        for (Ship existingShip : ships) {
+            if (existingShip.isAdjacentToAnotherShip(ship)) {
+                throw new IllegalArgumentException("Error! You placed it too close to another one.");
+            }
+        }
         List<Coordinate> coordinates = ship.getCoordinates().getParts();
         coordinates.forEach(coordinate -> {
             int rowIndex = convertRowToIndex(coordinate);
@@ -48,25 +53,6 @@ public class GameField {
             fieldPositions.get(rowIndex).set(colIndex, 'O');
         });
         ships.add(ship);
-    }
-
-    public void addAirCraftCarrier(Coordinates coordinates) {
-        List<Coordinate> coordinatesParts = coordinates.getParts();
-        coordinatesParts.forEach(coordinate -> {
-            int rowIndex = convertRowToIndex(coordinate);
-            int colIndex = convertColToIndex(coordinate);
-            fieldPositions.get(rowIndex).set(colIndex, 'O');
-        });
-
-    }
-
-    public void addBattleship(Coordinates coordinates) {
-        List<Coordinate> coordinatesParts = coordinates.getParts();
-        coordinatesParts.forEach(coordinate -> {
-            int rowIndex = convertRowToIndex(coordinate);
-            int colIndex = convertColToIndex(coordinate);
-            fieldPositions.get(rowIndex).set(colIndex, 'O');
-        });
     }
 
     private int convertRowToIndex(Coordinate coordinate) {

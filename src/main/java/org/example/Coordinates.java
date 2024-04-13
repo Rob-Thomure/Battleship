@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Coordinates {
-    private Coordinate coordinate1;
-    private Coordinate coordinate2;
+    private final Coordinate coordinate1;
+    private final Coordinate coordinate2;
 
     public Coordinates(Coordinate coordinate1, Coordinate coordinate2) throws IllegalArgumentException {
         if (isDiagonal(coordinate1, coordinate2) || !coordinate1.isWithinBounds() || !coordinate2.isWithinBounds()) {
@@ -18,6 +18,12 @@ public class Coordinates {
     }
 
     private boolean isDiagonal(Coordinate coordinate1, Coordinate coordinate2) {
+        boolean sameRow = coordinate1.getRow() == coordinate2.getRow();
+        boolean sameColumn = coordinate1.getColumn() == coordinate2.getColumn();
+        return !sameRow && !sameColumn;
+    }
+
+    public boolean isDiagonal() {
         boolean sameRow = coordinate1.getRow() == coordinate2.getRow();
         boolean sameColumn = coordinate1.getColumn() == coordinate2.getColumn();
         return !sameRow && !sameColumn;
