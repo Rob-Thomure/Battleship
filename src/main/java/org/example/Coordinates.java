@@ -90,3 +90,9 @@ public class Coordinates {
     }
 
 }
+
+class DiagonalCoordinatesException extends RuntimeException {
+    public DiagonalCoordinatesException() {
+        super("Error diagonal coordinates");
+    }
+}
