@@ -43,7 +43,7 @@ public class GameField {
     public void addShip(Ship ship) throws IllegalArgumentException {
         for (Ship existingShip : ships) {
             if (existingShip.isAdjacentToAnotherShip(ship)) {
-                throw new IllegalArgumentException("Error! You placed it too close to another one.");
+                throw new TooCloseToAnotherShipException();
             }
         }
         List<Coordinate> coordinates = ship.getCoordinates().getParts();
@@ -66,8 +66,8 @@ public class GameField {
 
 }
 
-class ToCloseToAnotherShipException extends RuntimeException {
-    public ToCloseToAnotherShipException() {
+class TooCloseToAnotherShipException extends RuntimeException {
+    public TooCloseToAnotherShipException() {
         super("Error! You placed it too close to another one.");
     }
 }

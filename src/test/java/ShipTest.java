@@ -32,4 +32,12 @@ public class ShipTest {
         boolean result = airCraftCarrier.isAdjacentToAnotherShip(destroyer);
         assertFalse(result);
     }
+
+//    @Test
+//    public void testDestroyerCreation() {
+//        Coordinate coordinateE6 = new Coordinate("E6");
+//        Coordinate coordinateD6 = new Coordinate("D6");
+//        Coordinates coordinatesE6D6 = new Coordinates(coordinateE6, coordinateD6);
+//        assertDoesNotThrow(IllegalShipLengthException.class, () -> new Destroyer(coordinatesE6D6));
+//    }
 }

@@ -6,7 +6,7 @@ public abstract class Ship {
 
     public Ship(int shipLength, Coordinates coordinates) {
         if (shipLength != coordinates.getLength()) {
-            throw new IllegalShipLength();
+            throw new IllegalShipLengthException();
         }
         this.shipLength = shipLength;
         this.coordinates = coordinates;
@@ -32,8 +32,3 @@ public abstract class Ship {
     }
 }
 
-class IllegalShipLength extends RuntimeException {
-    public IllegalShipLength() {
-        super("Error! Wrong length");
-    }
-}
