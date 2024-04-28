@@ -65,9 +65,3 @@ public class GameField {
 
 
 }
-
-class TooCloseToAnotherShipException extends RuntimeException {
-    public TooCloseToAnotherShipException() {
-        super("Error! You placed it too close to another one.");
-    }
-}
