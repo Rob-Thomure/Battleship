@@ -11,7 +11,7 @@ public class Coordinates {
 
     public Coordinates(Coordinate coordinate1, Coordinate coordinate2) throws IllegalArgumentException {
         if (isDiagonal(coordinate1, coordinate2) || !coordinate1.isWithinBounds() || !coordinate2.isWithinBounds()) {
-            throw new DiagonalCoordinatesException();
+            throw new DiagonalCoordinates();
         }
         this.coordinate1 = coordinate1;
         this.coordinate2 = coordinate2;
@@ -89,10 +89,4 @@ public class Coordinates {
         return coordinates;
     }
 
-}
-
-class DiagonalCoordinatesException extends RuntimeException {
-    public DiagonalCoordinatesException() {
-        super("Error diagonal coordinates");
-    }
 }

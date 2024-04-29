@@ -41,7 +41,7 @@ public class BattleshipGame {
                 System.out.println(e.getMessage() + " of the %s! Try again:\n".formatted(shipName));
             } catch (TooCloseToAnotherShipException e) {
                 System.out.println(e.getMessage() + " Try again:\n");
-            } catch (DiagonalCoordinatesException e) {
+            } catch (DiagonalCoordinates e) {
                 System.out.println("Error! Wrong ship location! Try again:\n");
             }
         }
