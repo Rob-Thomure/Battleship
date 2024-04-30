@@ -64,4 +64,17 @@ public class GameField {
     }
 
 
+    public String takeShot(Coordinate coordinate) {
+        int rowIndex = convertRowToIndex(coordinate);
+        int colIndex = convertColToIndex(coordinate);
+        if (rowIndex < 0 || rowIndex > 9 || colIndex < 0 || colIndex > 9) {
+            return "out of bounds";
+        } else if (fieldPositions.get(rowIndex).get(colIndex) == 'O') {
+            fieldPositions.get(rowIndex).set(colIndex, 'X');
+            return "hit";
+        } else {
+            fieldPositions.get(rowIndex).set(colIndex, 'M');
+            return "missed";
+        }
+    }
 }

@@ -121,7 +121,7 @@ public class GameFieldTest {
         Coordinate coordinateD6 = new Coordinate("D6");
         Coordinates coordinatesE6D6 = new Coordinates(coordinateE6, coordinateD6);
         Ship destroyer = new Destroyer(coordinatesE6D6);
-        assertThrows(IllegalArgumentException.class, () -> gameField.addShip(destroyer));
+        assertThrows(TooCloseToAnotherShipException.class, () -> gameField.addShip(destroyer));
     }
 
     @Test
@@ -130,11 +130,7 @@ public class GameFieldTest {
         addBattleshipA1D1();
         addSubmarineJ10J8();
         addCruiserB9D9();
-        Coordinate coordinateI2 = new Coordinate("I2");
-        Coordinate coordinateJ2 = new Coordinate("J2");
-        Coordinates coordinatesE6D6 = new Coordinates(coordinateI2, coordinateJ2);
-        Ship destroyer = new Destroyer(coordinatesE6D6);
-        gameField.addShip(destroyer);
+        addDestroyerI2J2();
         String expecpectedGameFieldString = """
                   1 2 3 4 5 6 7 8 9 10
                 A O ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -152,7 +148,70 @@ public class GameFieldTest {
         assertEquals(expecpectedGameFieldString, actualGameFieldString);
     }
 
+    @Test
+    public void testPositiveHitAtA1() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateA1 = new Coordinate("A1");
+        String expected = "hit";
+        String result = gameField.takeShot(coordinateA1);
+        assertEquals(expected, result);
+    }
 
+    @Test
+    public void testGameFieldToStringAfterPositiveHitAtA1() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateA1 = new Coordinate("A1");
+        gameField.takeShot(coordinateA1);
+        String expected = """
+                  1 2 3 4 5 6 7 8 9 10
+                A X ~ ~ ~ ~ ~ ~ ~ ~ ~
+                B O ~ ~ ~ ~ ~ ~ ~ O ~
+                C O ~ ~ ~ ~ ~ ~ ~ O ~
+                D O ~ ~ ~ ~ ~ ~ ~ O ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ O O O O O ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ O ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ O ~ ~ ~ ~ ~ O O O
+                """;
+        String result = gameField.toString();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testTakeHitInvalidCoordinates() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateZ1 = new Coordinate("Z1");
+        String expected = "out of bounds";
+        String result = gameField.takeShot(coordinateZ1);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testTakeHitAtA2AndMiss() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateA2 = new Coordinate("A2");
+        String expected = "missed";
+        String result = gameField.takeShot(coordinateA2);
+        assertEquals(expected, result);
+    }
 
 
     private void addAircraftCarrierF3F7() {
@@ -185,6 +244,14 @@ public class GameFieldTest {
         Coordinates coordinatesB9D9 = new Coordinates(coordinateB9, coordinateD9);
         Ship cruiser = new Cruiser(coordinatesB9D9);
         gameField.addShip(cruiser);
+    }
+
+    private void addDestroyerI2J2() {
+        Coordinate coordinateI2 = new Coordinate("I2");
+        Coordinate coordinateJ2 = new Coordinate("J2");
+        Coordinates coordinatesI2J2 = new Coordinates(coordinateI2, coordinateJ2);
+        Ship destroyer = new Destroyer(coordinatesI2J2);
+        gameField.addShip(destroyer);
     }
 
 
