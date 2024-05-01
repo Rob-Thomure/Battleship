@@ -9,35 +9,20 @@ public class GameField {
     List<Ship> ships;
 
     public GameField() {
-        createFieldPositions();
+        this.fieldPositions = createGrid();
         this.ships = new ArrayList<>();
     }
 
-    private void createFieldPositions() {
-        fieldPositions = new ArrayList<>();
+    private List<List<Character>> createGrid() {
+        List<List<Character>> grid = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             List<Character> row = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
                 row.add('~');
             }
-            fieldPositions.add(row);
+            grid.add(row);
         }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuffer = new StringBuilder("  1 2 3 4 5 6 7 8 9 10\n");
-        List<Character> rowNames = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
-        for (int i = 0; i < 10; i++) {
-            String rowString = fieldPositions.get(i).stream()
-                    .map(Object::toString)
-                    .collect(Collectors.joining(" "));
-            stringBuffer.append(rowNames.get(i))
-                    .append(" ")
-                    .append(rowString)
-                    .append("\n");
-        }
-        return stringBuffer.toString();
+        return grid;
     }
 
     public void addShip(Ship ship) throws IllegalArgumentException {
@@ -77,4 +62,41 @@ public class GameField {
             return "missed";
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("  1 2 3 4 5 6 7 8 9 10\n");
+        List<Character> rowNames = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
+        for (int i = 0; i < 10; i++) {
+            String rowString = fieldPositions.get(i).stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(" "));
+            stringBuilder.append(rowNames.get(i))
+                    .append(" ")
+                    .append(rowString)
+                    .append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String fogOfWarToString() {
+        StringBuilder stringBuilder = new StringBuilder("  1 2 3 4 5 6 7 8 9 10\n");
+        List<Character> rowNames = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
+        for (int i = 0; i < 10; i++) {
+            String rowString = fieldPositions.get(i).stream()
+                    .map(this::createFog)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(" "));
+            stringBuilder.append(rowNames.get(i))
+                    .append(" ")
+                    .append(rowString)
+                    .append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    private Character createFog(Character character) {
+        return character.equals('O') ? '~' : character;
+    }
+
 }

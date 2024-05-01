@@ -13,7 +13,7 @@ public class BattleshipGame {
         System.out.println(gameField);
         addShips();
         System.out.println("The game starts!\n");
-        System.out.println(gameField);
+        System.out.println(gameField.fogOfWarToString());
         System.out.println("Take a shot!\n");
         takeShot();
     }
@@ -32,11 +32,15 @@ public class BattleshipGame {
     private boolean determineShotResult(String result) {
         boolean validShot = true;
         if (result.equals("hit")) {
-            System.out.println(gameField);
+            System.out.println(gameField.fogOfWarToString());
             System.out.println("You hit a ship!");
-        } else if (result.equals("missed")) {
+            System.out.println();
             System.out.println(gameField);
+        } else if (result.equals("missed")) {
+            System.out.println(gameField.fogOfWarToString());
             System.out.println("You missed!");
+            System.out.println();
+            System.out.println(gameField);
         } else if (result.equals("out of bounds")) {
             System.out.println("Error! You entered the wrong coordinates! Try again:");
             System.out.println();

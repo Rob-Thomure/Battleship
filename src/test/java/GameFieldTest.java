@@ -213,6 +213,58 @@ public class GameFieldTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    public void testFogOfWarAfterHitAtA1() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateA1 = new Coordinate("A1");
+        gameField.takeShot(coordinateA1);
+        String expected = """
+                  1 2 3 4 5 6 7 8 9 10
+                A X ~ ~ ~ ~ ~ ~ ~ ~ ~
+                B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                """;
+        String result = gameField.fogOfWarToString();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testFogOfWarAfterMissAtA2() {
+        addAircraftCarrierF3F7();
+        addBattleshipA1D1();
+        addSubmarineJ10J8();
+        addCruiserB9D9();
+        addDestroyerI2J2();
+        Coordinate coordinateA2 = new Coordinate("A2");
+        gameField.takeShot(coordinateA2);
+        String expected = """
+                  1 2 3 4 5 6 7 8 9 10
+                A ~ M ~ ~ ~ ~ ~ ~ ~ ~
+                B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                """;
+        String result = gameField.fogOfWarToString();
+        assertEquals(expected, result);
+    }
+
 
     private void addAircraftCarrierF3F7() {
         Coordinate coordinateF3 = new Coordinate("F3");
