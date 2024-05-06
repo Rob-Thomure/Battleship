@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class BattleshipGame {
     GameField gameField;
+    private boolean gameOver = false;
 
     public BattleshipGame() {
         this.gameField = new GameField();
@@ -14,8 +15,19 @@ public class BattleshipGame {
         addShips();
         System.out.println("The game starts!\n");
         System.out.println(gameField.fogOfWarToString());
+
+        takeShots();
+    }
+
+    private void takeShots() {
         System.out.println("Take a shot!\n");
-        takeShot();
+        while (!gameOver) {
+            String input = new Scanner(System.in).nextLine();
+            System.out.println();
+            Coordinate coordinate = new Coordinate(input);
+            String result = gameField.takeShot(coordinate);
+            determineShotResult(result);
+        }
     }
 
     private void takeShot() {
@@ -33,18 +45,24 @@ public class BattleshipGame {
         boolean validShot = true;
         if (result.equals("hit")) {
             System.out.println(gameField.fogOfWarToString());
-            System.out.println("You hit a ship!");
+            System.out.println("You hit a ship! Try again:");
             System.out.println();
-            System.out.println(gameField);
         } else if (result.equals("missed")) {
             System.out.println(gameField.fogOfWarToString());
-            System.out.println("You missed!");
+            System.out.println("You missed. Try again:");
             System.out.println();
-            System.out.println(gameField);
         } else if (result.equals("out of bounds")) {
             System.out.println("Error! You entered the wrong coordinates! Try again:");
             System.out.println();
             validShot = false;
+        } else if (result.equals("sank")) {
+            System.out.println(gameField.fogOfWarToString());
+            System.out.println("You sank a ship! Specify a new target:");
+            System.out.println();
+        } else if (result.equals("all ships sunk")) {
+            System.out.println(gameField.fogOfWarToString());
+            System.out.println("You sank the last ship. You won. Congratulations!");
+            gameOver = true;
         }
         return validShot;
     }

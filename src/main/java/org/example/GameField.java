@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,14 +54,31 @@ public class GameField {
         int rowIndex = convertRowToIndex(coordinate);
         int colIndex = convertColToIndex(coordinate);
         if (rowIndex < 0 || rowIndex > 9 || colIndex < 0 || colIndex > 9) {
-            return "out of bounds";
-        } else if (fieldPositions.get(rowIndex).get(colIndex) == 'O') {
+            return  "out of bounds";
+        } else if (fieldPositions.get(rowIndex).get(colIndex) == 'O' || fieldPositions.get(rowIndex).get(colIndex) == 'X') {
             fieldPositions.get(rowIndex).set(colIndex, 'X');
-            return "hit";
+            Ship ship = getShipThatWasShot(coordinate);
+            ship.setCoordinateStatus(coordinate);
+            if (ships.stream().filter(Ship::isSunk).count() == 5) {
+                return "all ships sunk";
+            } else if (ship.isSunk()) {
+                return "sank";
+            } else {
+                return "hit";
+            }
         } else {
             fieldPositions.get(rowIndex).set(colIndex, 'M');
-            return "missed";
+            return  "missed";
         }
+    }
+
+    private Ship getShipThatWasShot(Coordinate coordinate) {
+        for (int i = 0; i < ships.size(); i++) {
+            if (ships.get(i).containsCoordinate(coordinate)) {
+                return ships.get(i);
+            }
+        }
+        return null;
     }
 
     @Override
