@@ -1,84 +1,125 @@
 package org.example;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class BattleshipGame {
-    GameField gameField;
+    GameField gameFieldPlayer1;
+    GameField gameFieldPlayer2;
     private boolean gameOver = false;
 
     public BattleshipGame() {
-        this.gameField = new GameField();
+        this.gameFieldPlayer1 = new GameField();
+        this.gameFieldPlayer2 = new GameField();
     }
 
     public void playGame() {
-        System.out.println(gameField);
-        addShips();
-        System.out.println("The game starts!\n");
-        System.out.println(gameField.fogOfWarToString());
-
-        takeShots();
-    }
-
-    private void takeShots() {
-        System.out.println("Take a shot!\n");
+        System.out.println("Player 1, place your ships on the game field\n");
+        System.out.println(gameFieldPlayer1);
+        addShipsPlayer1();
+        System.out.println("Press Enter and pass the move to another player");
+        waitForEnterKey();
+        System.out.println("Player 2, place your ships to the game field\n");
+        System.out.println(gameFieldPlayer2);
+        addShipsPlayer2();
+        System.out.println("Press Enter and pass the move to another player");
+        waitForEnterKey();
         while (!gameOver) {
-            String input = new Scanner(System.in).nextLine();
-            System.out.println();
-            Coordinate coordinate = new Coordinate(input);
-            String result = gameField.takeShot(coordinate);
-            determineShotResult(result);
+            takeShotPlayer1();
+            if (!gameOver) {
+                takeShotPlayer2();
+            }
         }
     }
 
-    private void takeShot() {
+    private void waitForEnterKey() {
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void takeShotPlayer1() {
+        System.out.print(gameFieldPlayer2.fogOfWarToString());
+        System.out.println("---------------------");
+        System.out.print(gameFieldPlayer1);
+        System.out.println();
+        System.out.println("Player 1, it's your turn:\n");
+        takeShotsWhileNotValid(gameFieldPlayer2);
+    }
+
+    private void takeShotPlayer2() {
+        System.out.print(gameFieldPlayer1.fogOfWarToString());
+        System.out.println("---------------------");
+        System.out.print(gameFieldPlayer2);
+        System.out.println();
+        System.out.println("Player 2, it's your turn:\n");
+        takeShotsWhileNotValid(gameFieldPlayer1);
+    }
+
+    private void takeShotsWhileNotValid(GameField gameFieldPlayer) {
         boolean validShot = false;
         while (!validShot) {
             String input = new Scanner(System.in).nextLine();
             System.out.println();
             Coordinate coordinate = new Coordinate(input);
-            String result = gameField.takeShot(coordinate);
-            validShot = determineShotResult(result);
+            String result = gameFieldPlayer.takeShot(coordinate);
+            validShot = determineShotResultPlayer(result);
         }
     }
 
-    private boolean determineShotResult(String result) {
+    private boolean determineShotResultPlayer(String result) {
         boolean validShot = true;
-        if (result.equals("hit")) {
-            System.out.println(gameField.fogOfWarToString());
-            System.out.println("You hit a ship! Try again:");
-            System.out.println();
-        } else if (result.equals("missed")) {
-            System.out.println(gameField.fogOfWarToString());
-            System.out.println("You missed. Try again:");
-            System.out.println();
-        } else if (result.equals("out of bounds")) {
-            System.out.println("Error! You entered the wrong coordinates! Try again:");
-            System.out.println();
-            validShot = false;
-        } else if (result.equals("sank")) {
-            System.out.println(gameField.fogOfWarToString());
-            System.out.println("You sank a ship! Specify a new target:");
-            System.out.println();
-        } else if (result.equals("all ships sunk")) {
-            System.out.println(gameField.fogOfWarToString());
-            System.out.println("You sank the last ship. You won. Congratulations!");
-            gameOver = true;
+        switch (result) {
+            case "hit" -> {
+                System.out.println("You hit a ship!");
+                System.out.println("Press Enter and pass the move to another player");
+                waitForEnterKey();
+            }
+            case "missed" -> {
+                System.out.println("You missed!");
+                System.out.println("Press Enter and pass the move to another player");
+                waitForEnterKey();
+            }
+            case "out of bounds" -> {
+                System.out.println("Error! You entered the wrong coordinates! Try again:");
+                System.out.println();
+                validShot = false;
+            }
+            case "sank" -> {
+                System.out.println("You sank a ship!");
+                System.out.println("Press Enter and pass the move to another player");
+                waitForEnterKey();
+            }
+            case "all ships sunk" -> {
+                System.out.println("You sank the last ship. You won. Congratulations!");
+                gameOver = true;
+            }
         }
         return validShot;
     }
 
-    private void addShips() {
-        addShip("Aircraft Carrier");
-        addShip("Battleship");
-        addShip("Submarine");
-        addShip("Cruiser");
-        addShip("Destroyer");
+    private void addShipsPlayer1() {
+        addShip("Aircraft Carrier", gameFieldPlayer1);
+        addShip("Battleship", gameFieldPlayer1);
+        addShip("Submarine", gameFieldPlayer1);
+        addShip("Cruiser", gameFieldPlayer1);
+        addShip("Destroyer", gameFieldPlayer1);
     }
 
-    private void addShip(String shipName) {
+    private void addShipsPlayer2() {
+        addShip("Aircraft Carrier", gameFieldPlayer2);
+        addShip("Battleship", gameFieldPlayer2);
+        addShip("Submarine", gameFieldPlayer2);
+        addShip("Cruiser", gameFieldPlayer2);
+        addShip("Destroyer", gameFieldPlayer2);
+    }
+
+    private void addShip(String shipName, GameField gameField) {
         Scanner scanner = new Scanner(System.in);
         boolean validShip = false;
-        System.out.println("Enter the coordinates of the %s (%d cells):\n".formatted(shipName, getShipSize(shipName)));
+        System.out.printf("Enter the coordinates of the %s (%d cells):\n%n", shipName, getShipSize(shipName));
         while (!validShip) {
             try {
                 String[] input = scanner.nextLine().split(" ");
