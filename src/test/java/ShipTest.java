@@ -1,4 +1,7 @@
 import org.example.*;
+import org.example.ships.AirCraftCarrier;
+import org.example.ships.Destroyer;
+import org.example.ships.Ship;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

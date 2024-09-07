@@ -1,4 +1,8 @@
-package org.example;
+package org.example.ships;
+
+import org.example.Coordinate;
+import org.example.Coordinates;
+import org.example.IllegalShipLengthException;
 
 import java.util.ArrayList;
 import java.util.List;

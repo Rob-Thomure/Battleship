@@ -1,7 +1,8 @@
 package org.example;
 
+import org.example.ships.Ship;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

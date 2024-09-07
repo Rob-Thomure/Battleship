@@ -1,6 +1,8 @@
-package org.example;
+package org.example.ships;
 
-public class AirCraftCarrier extends Ship{
+import org.example.Coordinates;
+
+public class AirCraftCarrier extends Ship {
     private static final int SHIP_Length = 5;
 
     public AirCraftCarrier(Coordinates coordinates) {

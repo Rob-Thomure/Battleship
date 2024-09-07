@@ -1,4 +1,5 @@
 import org.example.*;
+import org.example.ships.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

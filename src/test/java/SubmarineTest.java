@@ -1,7 +1,6 @@
 import org.example.Coordinate;
 import org.example.Coordinates;
-import org.example.Ship;
-import org.example.Submarine;
+import org.example.ships.Submarine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
